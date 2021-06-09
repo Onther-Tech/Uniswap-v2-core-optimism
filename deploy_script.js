@@ -1,5 +1,5 @@
 const ethers = require('ethers')
-const { Watcher } = require('@eth-optimism/watcher')
+// const { Watcher } = require('@eth-optimism/watcher')
 const { getContractFactory } = require('@eth-optimism/contracts')
 
 const factory = (name, ovm = false) => {
@@ -14,24 +14,23 @@ const factory__L2_UniswapV2Pair = factory('UniswapV2Pair', true)
 async function main() {
   // L2 messenger address is always the same.
   const l2MessengerAddress = '0x4200000000000000000000000000000000000007'
-  const l2RpcProvider = new ethers.providers.JsonRpcProvider('http://localhost:8545')
+  const l2RpcProvider = new ethers.providers.JsonRpcProvider('https://testnet1.optimism.tokamak.network')
 
   const key = '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'
   const l2Wallet = new ethers.Wallet(key, l2RpcProvider)
 
   // Tool that helps watches and waits for messages to be relayed between L1 and L2.
-  const watcher = new Watcher({
-    l2: {
-      provider: l2RpcProvider,
-      messengerAddress: l2MessengerAddress
-    }
-  });
+  // const watcher = new Watcher({
+  //   l2: {
+  //     provider: l2RpcProvider,
+  //     messengerAddress: l2MessengerAddress
+  //   }
+  // });
 
 
   console.log('Deploying L2 UniswapV2Factory...')
   const L2_UniswapV2Factory = await factory__L2_UniswapV2Factory.connect(l2Wallet).deploy(
     l2MessengerAddress,
-
   )
   const l2FactoryHash = await L2_UniswapV2Factory.deployTransaction.wait()
   console.log('L2UniswapV2Factory Contract address: ', l2FactoryHash.contractAddress);
